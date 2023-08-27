@@ -14,36 +14,36 @@ import {
   TableHead,
   TableRow,
   Typography,
-} from '@mui/material';
-import NextLink from 'next/link';
-import dynamic from 'next/dynamic';
-import Image from 'next/image';
-import React, { useContext, useEffect, useReducer } from 'react';
-import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js';
-import Layout from '../../components/Layout';
-import classes from '../../utils/classes';
-import { Store } from '../../utils/Store';
-import { useRouter } from 'next/router';
-import { getError } from '../../utils/error';
-import axios from 'axios';
-import { useSnackbar } from 'notistack';
+} from "@mui/material";
+import NextLink from "next/link";
+import dynamic from "next/dynamic";
+//import Image from "next/image";
+import React, { useContext, useEffect, useReducer } from "react";
+import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
+import Layout from "../../components/Layout";
+import classes from "../../utils/classes";
+import { Store } from "../../utils/Store";
+import { useRouter } from "next/router";
+import { getError } from "../../utils/error";
+import axios from "axios";
+import { useSnackbar } from "notistack";
 
 function reducer(state, action) {
   switch (action.type) {
-    case 'FETCH_REQUEST':
-      return { ...state, loading: true, error: '' };
-    case 'FETCH_SUCCESS':
-      return { ...state, loading: false, order: action.payload, error: '' };
-    case 'FETCH_FAIL':
+    case "FETCH_REQUEST":
+      return { ...state, loading: true, error: "" };
+    case "FETCH_SUCCESS":
+      return { ...state, loading: false, order: action.payload, error: "" };
+    case "FETCH_FAIL":
       return { ...state, loading: false, error: action.payload };
-    case 'PAY_REQUEST':
+    case "PAY_REQUEST":
       return { ...state, loadingPay: true };
-    case 'PAY_SUCCESS':
+    case "PAY_SUCCESS":
       return { ...state, loadingPay: false, successPay: true };
-    case 'PAY_FAIL':
+    case "PAY_FAIL":
       return { ...state, loadingPay: false, errorPay: action.payload };
-    case 'PAY_RESET':
-      return { ...state, loadingPay: false, successPay: false, errorPay: '' };
+    case "PAY_RESET":
+      return { ...state, loadingPay: false, successPay: false, errorPay: "" };
   }
 }
 function OrderScreen({ params }) {
@@ -54,7 +54,7 @@ function OrderScreen({ params }) {
     {
       loading: true,
       order: {},
-      error: '',
+      error: "",
     }
   );
 
@@ -80,38 +80,38 @@ function OrderScreen({ params }) {
 
   useEffect(() => {
     if (!userInfo) {
-      return router.push('/login');
+      return router.push("/login");
     }
     const fetchOrder = async () => {
       try {
-        dispatch({ type: 'FETCH_REQUEST' });
+        dispatch({ type: "FETCH_REQUEST" });
         const { data } = await axios.get(`/api/orders/${orderId}`, {
           headers: { authorization: `Bearer ${userInfo.token}` },
         });
 
-        dispatch({ type: 'FETCH_SUCCESS', payload: data });
+        dispatch({ type: "FETCH_SUCCESS", payload: data });
       } catch (err) {
-        dispatch({ type: 'FETCH_FAIL', payload: getError(err) });
+        dispatch({ type: "FETCH_FAIL", payload: getError(err) });
       }
     };
     if (!order._id || successPay || (order._id && order._id !== orderId)) {
       fetchOrder();
       if (successPay) {
-        dispatch({ type: 'PAY_RESET' });
+        dispatch({ type: "PAY_RESET" });
       }
     } else {
       const loadPaypalScript = async () => {
-        const { data: clientId } = await axios.get('/api/keys/paypal', {
+        const { data: clientId } = await axios.get("/api/keys/paypal", {
           headers: { authorization: `Bearer ${userInfo.token}` },
         });
         paypalDispatch({
-          type: 'resetOptions',
+          type: "resetOptions",
           value: {
-            'client-id': clientId,
-            currency: 'USD',
+            "client-id": clientId,
+            currency: "USD",
           },
         });
-        paypalDispatch({ type: 'setLoadingStatus', value: 'pending' });
+        paypalDispatch({ type: "setLoadingStatus", value: "pending" });
       };
       loadPaypalScript();
     }
@@ -133,7 +133,7 @@ function OrderScreen({ params }) {
   function onApprove(data, actions) {
     return actions.order.capture().then(async function (details) {
       try {
-        dispatch({ type: 'PAY_REQUEST' });
+        dispatch({ type: "PAY_REQUEST" });
         const { data } = await axios.put(
           `/api/orders/${order._id}/pay`,
           details,
@@ -141,16 +141,16 @@ function OrderScreen({ params }) {
             headers: { authorization: `Bearer ${userInfo.token}` },
           }
         );
-        dispatch({ type: 'PAY_SUCCESS', payload: data });
-        enqueueSnackbar('Order is paid', { variant: 'success' });
+        dispatch({ type: "PAY_SUCCESS", payload: data });
+        enqueueSnackbar("Order is paid", { variant: "success" });
       } catch (err) {
-        dispatch({ type: 'PAY_FAIL', payload: getError(err) });
-        enqueueSnackbar(getError(err), { variant: 'error' });
+        dispatch({ type: "PAY_FAIL", payload: getError(err) });
+        enqueueSnackbar(getError(err), { variant: "error" });
       }
     });
   }
   function onError(err) {
-    enqueueSnackbar(getError(err), { variant: 'error' });
+    enqueueSnackbar(getError(err), { variant: "error" });
   }
 
   return (
@@ -174,15 +174,15 @@ function OrderScreen({ params }) {
                   </Typography>
                 </ListItem>
                 <ListItem>
-                  {shippingAddress.fullName}, {shippingAddress.address},{' '}
-                  {shippingAddress.city}, {shippingAddress.postalCode},{' '}
+                  {shippingAddress.fullName}, {shippingAddress.address},{" "}
+                  {shippingAddress.city}, {shippingAddress.postalCode},{" "}
                   {shippingAddress.country}
                 </ListItem>
                 <ListItem>
-                  Status:{' '}
+                  Status:{" "}
                   {isDelivered
                     ? `delivered at ${deliveredAt}`
-                    : 'not delivered'}
+                    : "not delivered"}
                 </ListItem>
               </List>
             </Card>
@@ -196,7 +196,7 @@ function OrderScreen({ params }) {
                 </ListItem>
                 <ListItem>{paymentMethod}</ListItem>
                 <ListItem>
-                  Status: {isPaid ? `paid at ${paidAt}` : 'not paid'}
+                  Status: {isPaid ? `paid at ${paidAt}` : "not paid"}
                 </ListItem>
               </List>
             </Card>
@@ -225,12 +225,12 @@ function OrderScreen({ params }) {
                             <TableCell>
                               <NextLink href={`/product/${item.slug}`} passHref>
                                 <Link>
-                                  <Image
+                                  {/* <Image
                                     src={item.image}
                                     alt={item.name}
                                     width={50}
                                     height={50}
-                                  ></Image>
+                                  ></Image> */}
                                 </Link>
                               </NextLink>
                             </TableCell>

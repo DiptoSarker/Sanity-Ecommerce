@@ -7,10 +7,12 @@ import {
   CardMedia,
   Rating,
   Typography,
-} from '@mui/material';
-import NextLink from 'next/link';
-import React from 'react';
-import { urlForThumbnail } from '../utils/image';
+} from "@mui/material";
+//import Image from "next/image";
+import NextLink from "next/link";
+import React from "react";
+import logo from "../public/cr.jpeg";
+//import { urlForThumbnail } from "../utils/image";
 
 export default function ProductItem({ product, addToCartHandler }) {
   return (
@@ -19,11 +21,13 @@ export default function ProductItem({ product, addToCartHandler }) {
         <CardActionArea>
           <CardMedia
             component="img"
-            image={urlForThumbnail(product.image)}
+            image={logo}
             title={product.name}
           ></CardMedia>
+
           <CardContent>
-            <Typography>{product.name}</Typography>
+            {/* <Typography>{product.name}</Typography> */}
+            <Typography>{product.brand}</Typography>
             <Rating value={product.rating} readOnly></Rating>
           </CardContent>
         </CardActionArea>

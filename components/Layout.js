@@ -1,4 +1,4 @@
-import { createTheme } from '@mui/material/styles';
+import { createTheme } from "@mui/material/styles";
 import {
   AppBar,
   Badge,
@@ -9,32 +9,32 @@ import {
   Divider,
   Drawer,
   IconButton,
-  InputBase,
+  // InputBase,
   Link,
   List,
   ListItem,
   ListItemText,
   Menu,
   MenuItem,
-  Switch,
+  //Switch,
   ThemeProvider,
   Toolbar,
   Typography,
-  useMediaQuery,
-} from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import SearchIcon from '@mui/icons-material/Search';
-import CancelIcon from '@mui/icons-material/Cancel';
-import Head from 'next/head';
-import NextLink from 'next/link';
-import classes from '../utils/classes';
-import { useContext, useEffect, useState } from 'react';
-import { Store } from '../utils/Store';
-import jsCookie from 'js-cookie';
-import { useRouter } from 'next/router';
-import axios from 'axios';
-import { useSnackbar } from 'notistack';
-import { getError } from '../utils/error';
+  //useMediaQuery,
+} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+//import SearchIcon from "@mui/icons-material/Search";
+import CancelIcon from "@mui/icons-material/Cancel";
+import Head from "next/head";
+import NextLink from "next/link";
+import classes from "../utils/classes";
+import { useContext, useEffect, useState } from "react";
+import { Store } from "../utils/Store";
+import jsCookie from "js-cookie";
+import { useRouter } from "next/router";
+import axios from "axios";
+import { useSnackbar } from "notistack";
+import { getError } from "../utils/error";
 
 export default function Layout({ title, description, children }) {
   const router = useRouter();
@@ -44,37 +44,37 @@ export default function Layout({ title, description, children }) {
     components: {
       MuiLink: {
         defaultProps: {
-          underline: 'hover',
+          underline: "hover",
         },
       },
     },
     typography: {
       h1: {
-        fontSize: '1.6rem',
+        fontSize: "1.6rem",
         fontWeight: 400,
-        margin: '1rem 0',
+        margin: "1rem 0",
       },
       h2: {
-        fontSize: '1.4rem',
+        fontSize: "1.4rem",
         fontWeight: 400,
-        margin: '1rem 0',
+        margin: "1rem 0",
       },
     },
     palette: {
-      mode: darkMode ? 'dark' : 'light',
+      mode: darkMode ? "dark" : "light",
       primary: {
-        main: '#f0c000',
+        main: "#f0c000",
       },
       secondary: {
-        main: '#208080',
+        main: "#208080",
       },
     },
   });
-  const darkModeChangeHandler = () => {
-    dispatch({ type: darkMode ? 'DARK_MODE_OFF' : 'DARK_MODE_ON' });
-    const newDarkMode = !darkMode;
-    jsCookie.set('darkMode', newDarkMode ? 'ON' : 'OFF');
-  };
+  // const darkModeChangeHandler = () => {
+  //   dispatch({ type: darkMode ? "DARK_MODE_OFF" : "DARK_MODE_ON" });
+  //   const newDarkMode = !darkMode;
+  //   jsCookie.set("darkMode", newDarkMode ? "ON" : "OFF");
+  // };
   const [anchorEl, setAnchorEl] = useState(null);
   const loginMenuCloseHandler = (e, redirect) => {
     setAnchorEl(null);
@@ -87,12 +87,12 @@ export default function Layout({ title, description, children }) {
   };
   const logoutClickHandler = () => {
     setAnchorEl(null);
-    dispatch({ type: 'USER_LOGOUT' });
-    jsCookie.remove('userInfo');
-    jsCookie.remove('cartItems');
-    jsCookie.remove('shippingAddress');
-    jsCookie.remove('paymentMethod');
-    router.push('/');
+    dispatch({ type: "USER_LOGOUT" });
+    jsCookie.remove("userInfo");
+    jsCookie.remove("cartItems");
+    jsCookie.remove("shippingAddress");
+    jsCookie.remove("paymentMethod");
+    router.push("/");
   };
 
   const [sidbarVisible, setSidebarVisible] = useState(false);
@@ -111,27 +111,27 @@ export default function Layout({ title, description, children }) {
         const { data } = await axios.get(`/api/products/categories`);
         setCategories(data);
       } catch (err) {
-        enqueueSnackbar(getError(err), { variant: 'error' });
+        enqueueSnackbar(getError(err), { variant: "error" });
       }
     };
     fetchCategories();
   }, [enqueueSnackbar]);
 
-  const isDesktop = useMediaQuery('(min-width:600px)');
+  // const isDesktop = useMediaQuery("(min-width:600px)");
 
-  const [query, setQuery] = useState('');
-  const queryChangeHandler = (e) => {
-    setQuery(e.target.value);
-  };
-  const submitHandler = (e) => {
-    e.preventDefault();
-    router.push(`/search?query=${query}`);
-  };
+  // const [query, setQuery] = useState("");
+  // const queryChangeHandler = (e) => {
+  //   setQuery(e.target.value);
+  // };
+  // const submitHandler = (e) => {
+  //   e.preventDefault();
+  //   router.push(`/search?query=${query}`);
+  // };
 
   return (
     <>
       <Head>
-        <title>{title ? `${title} - Sanity Amazona` : 'Sanity Amazona'}</title>
+        <title>{title ? `${title} - DipShop` : "DipShop"}</title>
         {description && <meta name="description" content={description}></meta>}
       </Head>
       <ThemeProvider theme={theme}>
@@ -149,7 +149,7 @@ export default function Layout({ title, description, children }) {
               </IconButton>
               <NextLink href="/" passHref>
                 <Link>
-                  <Typography sx={classes.brand}>amazona</Typography>
+                  <Typography className="logo">DipShop</Typography>
                 </Link>
               </NextLink>
             </Box>
@@ -192,7 +192,7 @@ export default function Layout({ title, description, children }) {
                 ))}
               </List>
             </Drawer>
-            <Box sx={isDesktop ? classes.visible : classes.hidden}>
+            {/* <Box sx={isDesktop ? classes.visible : classes.hidden}>
               <form onSubmit={submitHandler}>
                 <Box sx={classes.searchForm}>
                   <InputBase
@@ -210,25 +210,25 @@ export default function Layout({ title, description, children }) {
                   </IconButton>
                 </Box>
               </form>
-            </Box>
+            </Box> */}
 
             <Box>
-              <Switch
+              {/* <Switch
                 checked={darkMode}
                 onChange={darkModeChangeHandler}
-              ></Switch>
+              ></Switch> */}
               <NextLink href="/cart" passHref>
                 <Link>
                   <Typography component="span">
                     {cart.cartItems.length > 0 ? (
                       <Badge
-                        color="secondary"
+                        className="logo"
                         badgeContent={cart.cartItems.length}
                       >
                         Cart
                       </Badge>
                     ) : (
-                      'Cart'
+                      "Cart"
                     )}
                   </Typography>
                 </Link>
@@ -239,11 +239,13 @@ export default function Layout({ title, description, children }) {
                     aria-controls="simple-menu"
                     aria-haspopup="true"
                     sx={classes.navbarButton}
+                    className="logo"
                     onClick={loginClickHandler}
                   >
                     {userInfo.name}
                   </Button>
                   <Menu
+                    className="logo"
                     id="simple-menu"
                     anchorEl={anchorEl}
                     keepMounted
@@ -251,13 +253,14 @@ export default function Layout({ title, description, children }) {
                     onClose={loginMenuCloseHandler}
                   >
                     <MenuItem
-                      onClick={(e) => loginMenuCloseHandler(e, '/profile')}
+                      className="logo"
+                      onClick={(e) => loginMenuCloseHandler(e, "/profile")}
                     >
                       Profile
                     </MenuItem>
                     <MenuItem
                       onClick={(e) =>
-                        loginMenuCloseHandler(e, '/order-history')
+                        loginMenuCloseHandler(e, "/order-history")
                       }
                     >
                       Order History
@@ -277,7 +280,7 @@ export default function Layout({ title, description, children }) {
           {children}
         </Container>
         <Box component="footer" sx={classes.footer}>
-          <Typography>All rights reserved. Sanity Amazona.</Typography>
+          <Typography>All rights reserved. DipShop.</Typography>
         </Box>
       </ThemeProvider>
     </>

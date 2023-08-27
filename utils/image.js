@@ -1,12 +1,14 @@
-import ImageUrlBuilder from '@sanity/image-url';
-import client from './client';
+import { createClient } from "next-sanity";
 
-function urlForThumbnail(source) {
-  return ImageUrlBuilder(client).image(source).width(300).url();
-}
+import imageUrlBuilder from "@sanity/image-url";
 
-function urlFor(source) {
-  return ImageUrlBuilder(client).image(source).width(580).url();
-}
+export const client = createClient({
+  projectId: "v3vmw53j",
+  dataset: "production",
+  apiVersion: "2023-05-25",
+  useCdn: false,
+});
 
-export { urlFor, urlForThumbnail };
+const builder = imageUrlBuilder(client);
+
+export const urlFor = (source) => builder.image(source);

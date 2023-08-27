@@ -15,16 +15,17 @@ import {
   TableHead,
   TableRow,
   Typography,
-} from '@mui/material';
-import axios from 'axios';
-import dynamic from 'next/dynamic';
-import Image from 'next/image';
-import NextLink from 'next/link';
-import { useRouter } from 'next/router';
-import { useSnackbar } from 'notistack';
-import { useContext } from 'react';
-import Layout from '../components/Layout';
-import { Store } from '../utils/Store';
+} from "@mui/material";
+import axios from "axios";
+import dynamic from "next/dynamic";
+import Image from "next/image";
+import NextLink from "next/link";
+import { useRouter } from "next/router";
+import { useSnackbar } from "notistack";
+import { useContext } from "react";
+import Layout from "../components/Layout";
+import { Store } from "../utils/Store";
+import logo from "../public/shirt.webp";
 
 function CartScreen() {
   const router = useRouter();
@@ -40,11 +41,11 @@ function CartScreen() {
   const updateCartHandler = async (item, quantity) => {
     const { data } = await axios.get(`/api/products/${item._id}`);
     if (data.countInStock < quantity) {
-      enqueueSnackbar('Sorry. Product is out of stock', { variant: 'error' });
+      enqueueSnackbar("Sorry. Product is out of stock", { variant: "error" });
       return;
     }
     dispatch({
-      type: 'CART_ADD_ITEM',
+      type: "CART_ADD_ITEM",
       payload: {
         _key: item._key,
         name: item.name,
@@ -56,11 +57,11 @@ function CartScreen() {
       },
     });
     enqueueSnackbar(`${item.name} updated in the cart`, {
-      variant: 'success',
+      variant: "success",
     });
   };
   const removeItemHandler = (item) => {
-    dispatch({ type: 'CART_REMOVE_ITEM', payload: item });
+    dispatch({ type: "CART_REMOVE_ITEM", payload: item });
   };
   return (
     <Layout title="Shopping Cart">
@@ -70,7 +71,7 @@ function CartScreen() {
       {cartItems.length === 0 ? (
         <Box>
           <Typography>
-            Cart is empty.{' '}
+            Cart is empty.{" "}
             <NextLink href="/" passHref>
               <Link>Go shopping</Link>
             </NextLink>
@@ -97,7 +98,7 @@ function CartScreen() {
                         <NextLink href={`/product/${item.slug}`} passHref>
                           <Link>
                             <Image
-                              src={item.image}
+                              src={logo}
                               alt={item.name}
                               width={50}
                               height={50}
@@ -149,15 +150,15 @@ function CartScreen() {
               <List>
                 <ListItem>
                   <Typography variant="h2">
-                    Subtotal ({cartItems.reduce((a, c) => a + c.quantity, 0)}{' '}
-                    items) : ${' '}
+                    Subtotal ({cartItems.reduce((a, c) => a + c.quantity, 0)}{" "}
+                    items) : ${" "}
                     {cartItems.reduce((a, c) => a + c.quantity * c.price, 0)}
                   </Typography>
                 </ListItem>
                 <ListItem>
                   <Button
                     onClick={() => {
-                      router.push('/shipping');
+                      router.push("/shipping");
                     }}
                     fullWidth
                     color="primary"
